@@ -5,6 +5,8 @@ import com.sprite.concurso.pojo.QR;
 import com.sprite.concurso.pojo.ReglaDeJuego;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,14 +20,14 @@ public class JuegoService {
     /*@Autowired*/
     ReglaDeJuego reglaDeJuego = new ReglaDeJuego();
 
-    public String setReglas(ReglaDeJuego payload) {
+    public ResponseEntity<String> setReglas(ReglaDeJuego payload) {
         this.reglaDeJuego=payload;
         int cantQRs = reglaDeJuego.getQrConcursantes().size();
 
         if (cantQRs == 0) {
-            return "Falta configurar QRs Concursantes.";
+            return new ResponseEntity<>("Falta configurar QRs Concursantes.", HttpStatus.CREATED);
         } else if (payload.getPremiosTier1() + payload.getPremiosTier2() > cantQRs) {
-            return "Hay mas Premios a repartir que Codigos concursando.";
+            return new ResponseEntity<>("Hay mas Premios a repartir que Codigos concursando.", HttpStatus.CREATED);
         } else {
             for (int i = 0; i < cantQRs; i++) {
                 reglaDeJuego.getQrConcursantes().get(i).setQrLeido(false);
@@ -34,7 +36,7 @@ public class JuegoService {
             ramdomizeTiers(payload.getPremiosTier1(), payload.getPremiosTier2());
         }
 
-        return "Ok";
+        return new ResponseEntity<>("Ok", HttpStatus.CREATED);
     }
 
     private void ramdomizeTiers(int premiosTier1, int premiosTier2) {
