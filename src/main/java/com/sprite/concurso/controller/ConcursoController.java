@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,8 @@ public class ConcursoController {
 
     @GetMapping(value = "/jugar", produces = {MediaType.TEXT_HTML_VALUE})
     public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
-        response.sendRedirect(juegoService.resultado(c)+"?c="+c);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        response.sendRedirect(juegoService.resultado(c)+"?c="+c+timestamp.getTime());
     }
 
     @GetMapping(value = "/revisar")
