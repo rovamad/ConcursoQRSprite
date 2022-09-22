@@ -4,12 +4,11 @@ import com.sprite.concurso.pojo.AbstractMethod;
 import com.sprite.concurso.pojo.QR;
 import com.sprite.concurso.pojo.ReglaDeJuego;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class JuegoService {
         return result;
     }
 
-    public String resultado(String code) {
+    public String resultado(String code, Timestamp timestamp) {
         String hmtl = "Tier0.html";
 
         if (reglaDeJuego == null || reglaDeJuego.getQrConcursantes().size() == 0) {
@@ -94,6 +93,7 @@ public class JuegoService {
                         reglaDeJuego.getQrConcursantes().get(i).getTier() == 1 &&
                         reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
+                    reglaDeJuego.getQrConcursantes().get(i).setTimestamp(timestamp);
 
                     hmtl = "Tier1.html";
                 } else if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
@@ -101,6 +101,7 @@ public class JuegoService {
                         reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
 
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
+                    reglaDeJuego.getQrConcursantes().get(i).setTimestamp(timestamp);
 
                     hmtl = "Tier2.html";
                 }
