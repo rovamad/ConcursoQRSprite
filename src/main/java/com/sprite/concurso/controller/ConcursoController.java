@@ -33,7 +33,7 @@ public class ConcursoController {
     public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Date date=timestamp;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy-hh:mm:ss a");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss a");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-3"));
         String dateString = sdf.format(date);
 
@@ -44,7 +44,7 @@ public class ConcursoController {
     @GetMapping(value = "/revisar")
     public List<QR> consultarEstadoActual() throws IOException {
 
-        return juegoService.consultarEstadoActual();
+        return juegoService.consultarGanadoresActuales();
     }
 
     @GetMapping(value = "ping", produces = MediaType.APPLICATION_JSON_VALUE)

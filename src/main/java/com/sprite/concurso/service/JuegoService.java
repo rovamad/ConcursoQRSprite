@@ -20,6 +20,9 @@ public class JuegoService {
     ReglaDeJuego reglaDeJuego = new ReglaDeJuego();
 
     public ResponseEntity<String> setReglas(ReglaDeJuego payload, Integer tier1, Integer tier2) {
+        tier1 = (tier1 == null) ? 0 : tier1;
+        tier2 = (tier2 == null) ? 0 : tier2;
+
         this.reglaDeJuego=payload;
         int cantQRs = reglaDeJuego.getQrConcursantes().size();
 
@@ -111,7 +114,7 @@ public class JuegoService {
         return hmtl;
     }
 
-    public List<QR> consultarEstadoActual() {
+    public List<QR> consultarGanadoresActuales() {
         List<QR> qrsLeidos = new ArrayList<>();
 
         for (int i = 0; i< reglaDeJuego.getQrConcursantes().size(); i++) {
