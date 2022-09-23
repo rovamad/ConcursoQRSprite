@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Slf4j
 @RestController
@@ -22,14 +25,20 @@ public class ConcursoController {
     JuegoService juegoService;
 
     @PostMapping(value = "/reglas", consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<String> setReglas(@RequestBody ReglaDeJuego payload) throws IOException {
-        return juegoService.setReglas(payload);
+    public ResponseEntity<String> setReglas(@RequestBody ReglaDeJuego payload, @RequestParam Integer tier1, @RequestParam Integer tier2) throws IOException {
+        return juegoService.setReglas(payload, tier1, tier2);
     }
 
     @GetMapping(value = "/jugar", produces = {MediaType.TEXT_HTML_VALUE})
     public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        response.sendRedirect(juegoService.resultado(c, timestamp)+"?c="+c+timestamp.getTime());
+        Date date=timestamp;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy-hh:mm:ss a");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        String dateString = sdf.format(date);
+
+        response.sendRedirect(juegoService.resultado(c, dateString)+"?c="+c+dateString);
+
     }
 
     @GetMapping(value = "/revisar")

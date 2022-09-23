@@ -12,7 +12,7 @@ public class QR {
     private String codigo;
     private boolean qrLeido;
     private int tier;
-    private Timestamp timestamp;
+    private String fechaActual;
 
     public boolean getQrLeido() {
         return qrLeido;

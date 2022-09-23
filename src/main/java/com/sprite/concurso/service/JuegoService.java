@@ -19,20 +19,20 @@ public class JuegoService {
     /*@Autowired*/
     ReglaDeJuego reglaDeJuego = new ReglaDeJuego();
 
-    public ResponseEntity<String> setReglas(ReglaDeJuego payload) {
+    public ResponseEntity<String> setReglas(ReglaDeJuego payload, Integer tier1, Integer tier2) {
         this.reglaDeJuego=payload;
         int cantQRs = reglaDeJuego.getQrConcursantes().size();
 
         if (cantQRs == 0) {
             return new ResponseEntity<>("Falta configurar QRs Concursantes.", HttpStatus.CREATED);
-        } else if (payload.getPremiosTier1() + payload.getPremiosTier2() > cantQRs) {
+        } else if (tier1 + tier2 > cantQRs) {
             return new ResponseEntity<>("Hay mas Premios a repartir que Codigos concursando.", HttpStatus.CREATED);
         } else {
             for (int i = 0; i < cantQRs; i++) {
                 reglaDeJuego.getQrConcursantes().get(i).setQrLeido(false);
             }
 
-            ramdomizeTiers(payload.getPremiosTier1(), payload.getPremiosTier2());
+            ramdomizeTiers(tier1, tier2);
         }
 
         return new ResponseEntity<>("Ok", HttpStatus.CREATED);
@@ -82,7 +82,7 @@ public class JuegoService {
         return result;
     }
 
-    public String resultado(String code, Timestamp timestamp) {
+    public String resultado(String code, String dateString) {
         String hmtl = "Tier0.html";
 
         if (reglaDeJuego == null || reglaDeJuego.getQrConcursantes().size() == 0) {
@@ -93,7 +93,7 @@ public class JuegoService {
                         reglaDeJuego.getQrConcursantes().get(i).getTier() == 1 &&
                         reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
-                    reglaDeJuego.getQrConcursantes().get(i).setTimestamp(timestamp);
+                    reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
 
                     hmtl = "Tier1.html";
                 } else if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
@@ -101,7 +101,7 @@ public class JuegoService {
                         reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
 
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
-                    reglaDeJuego.getQrConcursantes().get(i).setTimestamp(timestamp);
+                    reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
 
                     hmtl = "Tier2.html";
                 }
@@ -112,6 +112,13 @@ public class JuegoService {
     }
 
     public List<QR> consultarEstadoActual() {
-        return reglaDeJuego.getQrConcursantes();
+        List<QR> qrsLeidos = new ArrayList<>();
+
+        for (int i = 0; i< reglaDeJuego.getQrConcursantes().size(); i++) {
+            if (reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == true) {
+                qrsLeidos.add(reglaDeJuego.getQrConcursantes().get(i));
+            }
+        }
+        return qrsLeidos;
     }
 }
