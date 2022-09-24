@@ -9,14 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Slf4j
 @Service
 public class JuegoService {
-
-    /*@Autowired*/
     ReglaDeJuego reglaDeJuego = new ReglaDeJuego();
 
     public ResponseEntity<String> setReglas(ReglaDeJuego payload, Integer tier1, Integer tier2) {
@@ -85,8 +86,9 @@ public class JuegoService {
         return result;
     }
 
-    public String resultado(String code, String dateString) {
-        String hmtl = "Tier0.html";
+    public String resultado(String code) {
+        String html = "https://sprite.webmark.cl/tier00.html";
+        //String html = "Tier0.html";
 
         if (reglaDeJuego == null || reglaDeJuego.getQrConcursantes().size() == 0) {
             return "Error.html";
@@ -94,24 +96,44 @@ public class JuegoService {
             for (int i = 0; i< reglaDeJuego.getQrConcursantes().size(); i++) {
                 if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
                         reglaDeJuego.getQrConcursantes().get(i).getTier() == 1 &&
-                        reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
+                        reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false &&
+                        reglaDeJuego.getQrConcursantes().get(i).getFechaActual() == null) {
+
+                    String dateString = crearFechaActual();
+
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
                     reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
 
-                    hmtl = "Tier1.html";
+                    html = "https://sprite.webmark.cl/tier01.html?c="+code+dateString;
+                    //html = "Tier1.html?c="+code+dateString;
                 } else if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
                         reglaDeJuego.getQrConcursantes().get(i).getTier() == 2 &&
-                        reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false) {
+                        reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false &&
+                        reglaDeJuego.getQrConcursantes().get(i).getFechaActual() == null) {
+
+                    String dateString = crearFechaActual();
 
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
                     reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
 
-                    hmtl = "Tier2.html";
+                    html = "https://sprite.webmark.cl/tier02.html?c="+code+dateString;
+                    //html = "Tier2.html?c="+code+dateString;
                 }
             }
         }
 
-        return hmtl;
+        return html;
+    }
+
+    private String crearFechaActual() {
+        Timestamp timestamp = null;
+        timestamp = new Timestamp(System.currentTimeMillis());
+        Date date=timestamp;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        String dateString = sdf.format(date);
+
+        return dateString;
     }
 
     public List<QR> consultarGanadoresActuales() {

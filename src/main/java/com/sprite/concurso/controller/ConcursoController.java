@@ -31,14 +31,7 @@ public class ConcursoController {
 
     @GetMapping(value = "/jugar", produces = {MediaType.TEXT_HTML_VALUE})
     public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Date date=timestamp;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss a");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT-3"));
-        String dateString = sdf.format(date);
-
-        response.sendRedirect(juegoService.resultado(c, dateString)+"?c="+c+dateString);
-
+        response.sendRedirect(juegoService.resultado(c));
     }
 
     @GetMapping(value = "/revisar")
