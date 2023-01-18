@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 @Slf4j
 @RestController
@@ -31,6 +27,7 @@ public class ConcursoController {
 
     @GetMapping(value = "/jugar", produces = {MediaType.TEXT_HTML_VALUE})
     public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
+        response.setHeader("Authorization","eknaeu3sfvmdnxvqkfz486j2y6z835bi-10823b52jmxyzrym56hg5ga21i5fjn03b");
         response.sendRedirect(juegoService.resultado(c));
     }
 
@@ -38,6 +35,11 @@ public class ConcursoController {
     public List<QR> consultarEstadoActual() throws IOException {
 
         return juegoService.consultarGanadoresActuales();
+    }
+
+    @GetMapping(value = "/logs")
+    public StringBuilder consultarLogsdeGanadores() throws IOException {
+        return juegoService.consultarLogsdeGanadores();
     }
 
     @GetMapping(value = "ping", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -19,6 +19,7 @@ import java.util.TimeZone;
 @Service
 public class JuegoService {
     ReglaDeJuego reglaDeJuego = new ReglaDeJuego();
+    StringBuilder winnerLog = new StringBuilder();
 
     public ResponseEntity<String> setReglas(ReglaDeJuego payload, Integer tier1, Integer tier2) {
         tier1 = (tier1 == null) ? 0 : tier1;
@@ -87,11 +88,11 @@ public class JuegoService {
     }
 
     public String resultado(String code) {
-        String html = "https://sprite.webmark.cl/tier00.html";
-        //String html = "Tier0.html";
+        //String html = "https://sprite.webmark.cl/tier00.html";
+        String html = "7fm2m1eg5kqofyzjniwdiityfw8xgc3mk.html";
 
         if (reglaDeJuego == null || reglaDeJuego.getQrConcursantes().size() == 0) {
-            return "Error.html";
+            return "utkwbxcgejb8v1n7lqf6wywc5xw7ccxvc.html";
         } else {
             for (int i = 0; i< reglaDeJuego.getQrConcursantes().size(); i++) {
                 if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
@@ -103,9 +104,10 @@ public class JuegoService {
 
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
                     reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
+                    winnerLog.append(dateString + " QR code:" + code +", Price: Tier 01");
 
-                    html = "https://sprite.webmark.cl/tier01.html?c="+code+dateString;
-                    //html = "Tier1.html?c="+code+dateString;
+                    //html = "https://sprite.webmark.cl/tier01.html?c="+code+dateString;
+                    html = "3d6nw2lyabresbnq5rjw6jde2sw5u48hj.html?c="+code+dateString;
                 } else if (reglaDeJuego.getQrConcursantes().get(i).getCodigo().equals(code) &&
                         reglaDeJuego.getQrConcursantes().get(i).getTier() == 2 &&
                         reglaDeJuego.getQrConcursantes().get(i).getQrLeido() == false &&
@@ -115,9 +117,10 @@ public class JuegoService {
 
                     reglaDeJuego.getQrConcursantes().get(i).setQrLeido(true);
                     reglaDeJuego.getQrConcursantes().get(i).setFechaActual(dateString);
+                    winnerLog.append(dateString + " QR code:" + code +", Price: Tier 02 \\n");
 
-                    html = "https://sprite.webmark.cl/tier02.html?c="+code+dateString;
-                    //html = "Tier2.html?c="+code+dateString;
+                    //html = "https://sprite.webmark.cl/tier02.html?c="+code+dateString;
+                    html = "p2vj4j59hlkuh75lkoovggu19ojofcas.html?c="+code+dateString;
                 }
             }
         }
@@ -145,5 +148,9 @@ public class JuegoService {
             }
         }
         return qrsLeidos;
+    }
+
+    public StringBuilder consultarLogsdeGanadores() {
+        return winnerLog;
     }
 }

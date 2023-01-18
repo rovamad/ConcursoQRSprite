@@ -27,8 +27,18 @@
 </html>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const myParam = urlParams.get('c');
+    var req = new XMLHttpRequest();
+    req.open('GET', document.location, false);
+    req.send(null);
+    var headers = req.getAllResponseHeaders().toLowerCase();
+    var token = headers.substring(headers.indexOf('Authorization: ') + 15,headers.indexOf('feature'));
 
-    document.body.innerHTML = document.body.innerHTML.replace('${code}', myParam);
+    if (token != 'eknaeu3sfvmdnxvqkfz486j2y6z835bi-10823b52jmxyzrym56hg5ga21i5fjn03b') {
+        window.location.replace(Tier0.html);
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('c');
+
+        document.body.innerHTML = document.body.innerHTML.replace('${code}', myParam);
+    }
 </script>
