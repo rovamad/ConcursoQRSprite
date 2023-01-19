@@ -27,18 +27,17 @@
 </html>
 
 <script>
-    var req = new XMLHttpRequest();
-    req.open('GET', document.location, false);
-    req.send(null);
-    var headers = req.getAllResponseHeaders().toLowerCase();
-    var token = headers.substring(headers.indexOf('Authorization: ') + 15,headers.indexOf('feature'));
+    const urlParams = new URLSearchParams(window.location.search);
+    const t = urlParams.get('t');
 
-    if (token != 'eknaeu3sfvmdnxvqkfz486j2y6z835bi-10823b52jmxyzrym56hg5ga21i5fjn03b') {
-        window.location.replace(Tier0.html);
+    if (window.history.replaceState) {
+        window.history.replaceState({}, "Ganaste una entrada para Daddy Yankee", "/api/concurso/daddy/v1/Tier1");
+    }
+
+    if (t != 'eknaeu3sfvmdnxvqkfz486j2y6z835bi-10823b52jmxyzrym56hg5ga21i5fjn03b') {
+        window.location.replace("_7fm2m1eg5kqofyzjniwdiityfw8xgc3mk.html");
     } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('c');
-
-        document.body.innerHTML = document.body.innerHTML.replace('${code}', myParam);
+        const c = urlParams.get('c');
+        document.body.innerHTML = document.body.innerHTML.replace('${code}', c);
     }
 </script>

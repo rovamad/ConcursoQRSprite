@@ -26,9 +26,7 @@ public class ConcursoController {
     }
 
     @GetMapping(value = "/jugar", produces = {MediaType.TEXT_HTML_VALUE})
-    public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {
-        response.setHeader("Authorization","eknaeu3sfvmdnxvqkfz486j2y6z835bi-10823b52jmxyzrym56hg5ga21i5fjn03b");
-        response.sendRedirect(juegoService.resultado(c));
+    public void jugar(HttpServletResponse response, @RequestParam String c) throws IOException {response.sendRedirect(juegoService.resultado(c));
     }
 
     @GetMapping(value = "/revisar")
@@ -39,6 +37,7 @@ public class ConcursoController {
 
     @GetMapping(value = "/logs")
     public StringBuilder consultarLogsdeGanadores() throws IOException {
+
         return juegoService.consultarLogsdeGanadores();
     }
 
